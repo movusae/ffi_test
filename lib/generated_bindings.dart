@@ -83,23 +83,29 @@ class CplxTest {
 
   set std(int value) => _std.value = value;
 
-  void CPLX_Init() {
-    return _CPLX_Init();
+  void Init(
+    ffi.Pointer<ffi.Void> data,
+  ) {
+    return _Init(
+      data,
+    );
   }
 
-  late final _CPLX_InitPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function()>>('CPLX_Init');
-  late final _CPLX_Init = _CPLX_InitPtr.asFunction<void Function()>();
+  late final _InitPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'Init');
+  late final _Init =
+      _InitPtr.asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
-  ffi.Pointer<ffi.Char> CPLX_GetPlatform() {
-    return _CPLX_GetPlatform();
+  ffi.Pointer<ffi.Char> GetPlatform() {
+    return _GetPlatform();
   }
 
-  late final _CPLX_GetPlatformPtr =
+  late final _GetPlatformPtr =
       _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'CPLX_GetPlatform');
-  late final _CPLX_GetPlatform =
-      _CPLX_GetPlatformPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+          'GetPlatform');
+  late final _GetPlatform =
+      _GetPlatformPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   void SetCallback(
     ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Uint32 age)>> callback,
@@ -119,9 +125,23 @@ class CplxTest {
       void Function(
           ffi.Pointer<
               ffi.NativeFunction<ffi.Void Function(ffi.Uint32 age)>>)>();
+
+  void SetDartPort(
+    int port,
+  ) {
+    return _SetDartPort(
+      port,
+    );
+  }
+
+  late final _SetDartPortPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(Dart_Port_DL)>>(
+          'SetDartPort');
+  late final _SetDartPort = _SetDartPortPtr.asFunction<void Function(int)>();
 }
 
 typedef va_list = ffi.Pointer<ffi.Char>;
+typedef Dart_Port_DL = ffi.Int64;
 
 const int _STL_COMPILER_PREPROCESSOR = 1;
 

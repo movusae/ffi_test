@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:ffi';
+import 'dart:isolate';
 
 import 'package:ffi_test/generated_bindings.dart';
 import 'package:ffi/ffi.dart';
@@ -21,7 +22,14 @@ void _loadLibrary() {
     print("cplx load success");
   }
   _cplxTest = CplxTest(_library!);
-  _cplxTest!.CPLX_Init();
+  _cplxTest!.Init(NativeApi.initializeApiDLData);
+
+  final pub = ReceivePort()
+    ..listen((message) {
+      print("cplx message=$message");
+    });
+
+  _cplxTest!.SetDartPort(pub.sendPort.nativePort);
   final funcPtr = Pointer.fromFunction<Void Function(Uint32)>(_age);
   _cplxTest!.SetCallback(funcPtr);
 }
@@ -32,7 +40,7 @@ void _age(int age) {
 
 String _getPlatform() {
   Timeline.startSync("get platform");
-  Pointer<Utf8> res = _cplxTest!.CPLX_GetPlatform() as Pointer<Utf8>;
+  Pointer<Utf8> res = _cplxTest!.GetPlatform() as Pointer<Utf8>;
   final ret = res.toDartString();
   if (kDebugMode) {
     print("cplx ret=$ret");
